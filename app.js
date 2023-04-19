@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 var users = require("./routes/users.js");
 var categories = require("./routes/categories.js");
 var entries = require("./routes/entries.js");
+var stories = require("./routes/stories.js");
 
 var app = express();
 
@@ -29,4 +30,5 @@ app.use(cookieParser());
 app.use("/api/v1/users", users);
 app.use("/api/v1/categories", categories);
 app.use("/api/v1/entries", entries);
+app.use("/api/v1/stories", stories);
 module.exports = app;
