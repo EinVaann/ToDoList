@@ -87,7 +87,7 @@ router.get("/category", async function (req, res, next) {
     }
     const entriesInCategory = await Entries.find({ category_id: category_id });
     return res.status(200).json({
-      category_name: category.category_name,
+      category,
       entriesInCategory,
     });
   } catch (error) {
