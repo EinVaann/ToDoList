@@ -33,6 +33,14 @@ const StorySchema = new Schema({
     otherNames:{
         type:Array,
         require:false
+    },
+    lastEdited:{
+        type:Date,
+        require: true,
+    },
+    rating:{
+        type:Number,
+        require: true,
     }
 })
 

@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/", async function (req, res, next) {
   try {
-    const storiesInfo = await Story.find();
+    const storiesInfo = await Story.find().sort({'lastEdited':-1});
     return res.status(200).json({
       storiesInfo,
     });
@@ -26,6 +26,7 @@ router.post("/create", async function (req, res, next) {
       lastVisit,
       synopsis,
       otherNames,
+      rating
     } = req.body;
 
     // Validate
@@ -37,12 +38,15 @@ router.post("/create", async function (req, res, next) {
       !chapter ||
       !readAt ||
       !lastVisit ||
-      !synopsis
+      !synopsis||
+      !rating
     ) {
       return res.status(400).json({
         Message: "Missing information.",
       });
     }
+    var dateFormat = new Date();
+    console.log(dateFormat);
     const newStory = new Story({
       name,
       cover,
@@ -52,6 +56,8 @@ router.post("/create", async function (req, res, next) {
       lastVisit,
       synopsis,
       otherNames,
+      lastEdited: dateFormat,
+      rating
     });
     await newStory.save();
     return res.status(200).json({
@@ -88,6 +94,7 @@ router.put("/edit", async function (req, res, next) {
       lastVisit,
       synopsis,
       otherNames,
+      rating
     } = req.body;
     const editing_stories_id = req.query.id;
 
@@ -108,13 +115,15 @@ router.put("/edit", async function (req, res, next) {
       !chapter ||
       !readAt ||
       !lastVisit ||
-      !synopsis
+      !synopsis||
+      !rating
     ) {
       return res.status(400).json({
         Message: "Missing information.",
       });
     }
-
+    var dateFormat = new Date();
+    console.log(dateFormat);
     // Edit story
     const newStory = {
       name,
@@ -125,6 +134,8 @@ router.put("/edit", async function (req, res, next) {
       lastVisit,
       synopsis,
       otherNames,
+      lastEdited: dateFormat,
+      rating
     };
     const updatedStories = await Story.findByIdAndUpdate(
       editing_stories_id,
@@ -165,7 +176,7 @@ router.get("/search", async function (req, res, next) {
         { name: { $regex: search_promt, $options: "i" } },
         { otherNames: { $regex: search_promt, $options: "i" } },
       ],
-    });
+    }).sort({'lastEdited':-1});
     return res.status(200).json({
       numberOfMatches: matchedStories.length,
       matchedStories,
