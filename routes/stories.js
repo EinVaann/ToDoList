@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/", async function (req, res, next) {
   try {
-    const storiesInfo = await Story.find().sort({'lastEdited':-1});
+    const storiesInfo = await Story.find().sort({ lastEdited: -1 });
     return res.status(200).json({
       storiesInfo,
     });
@@ -24,9 +24,8 @@ router.post("/create", async function (req, res, next) {
       chapter,
       readAt,
       lastVisit,
-      synopsis,
       otherNames,
-      rating
+      rating,
     } = req.body;
 
     // Validate
@@ -38,7 +37,6 @@ router.post("/create", async function (req, res, next) {
       !chapter ||
       !readAt ||
       !lastVisit ||
-      !synopsis||
       !rating
     ) {
       return res.status(400).json({
@@ -54,10 +52,9 @@ router.post("/create", async function (req, res, next) {
       chapter,
       readAt,
       lastVisit,
-      synopsis,
       otherNames,
       lastEdited: dateFormat,
-      rating
+      rating,
     });
     await newStory.save();
     return res.status(200).json({
@@ -92,9 +89,8 @@ router.put("/edit", async function (req, res, next) {
       chapter,
       readAt,
       lastVisit,
-      synopsis,
       otherNames,
-      rating
+      rating,
     } = req.body;
     const editing_stories_id = req.query.id;
 
@@ -115,7 +111,6 @@ router.put("/edit", async function (req, res, next) {
       !chapter ||
       !readAt ||
       !lastVisit ||
-      !synopsis||
       !rating
     ) {
       return res.status(400).json({
@@ -132,10 +127,9 @@ router.put("/edit", async function (req, res, next) {
       chapter,
       readAt,
       lastVisit,
-      synopsis,
       otherNames,
       lastEdited: dateFormat,
-      rating
+      rating,
     };
     const updatedStories = await Story.findByIdAndUpdate(
       editing_stories_id,
@@ -158,8 +152,8 @@ router.get("/get", async function (req, res, next) {
     const id = req.query.id;
     const story = await Story.findById(id);
     return res.status(200).json({
-        story
-    })
+      story,
+    });
   } catch (error) {
     return res.status(500).json({
       Error: "" + error,
@@ -176,7 +170,7 @@ router.get("/search", async function (req, res, next) {
         { name: { $regex: search_promt, $options: "i" } },
         { otherNames: { $regex: search_promt, $options: "i" } },
       ],
-    }).sort({'lastEdited':-1});
+    }).sort({ lastEdited: -1 });
     return res.status(200).json({
       numberOfMatches: matchedStories.length,
       matchedStories,

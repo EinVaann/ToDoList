@@ -26,10 +26,6 @@ const StorySchema = new Schema({
         type:String,
         require: true
     },
-    synopsis:{
-        type:String,
-        require: true
-    },
     otherNames:{
         type:Array,
         require:false
