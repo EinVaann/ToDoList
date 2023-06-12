@@ -27,9 +27,12 @@ router.post("/create", async function (req, res, next) {
       otherNames,
       rating,
     } = req.body;
-
+    if (name == "") {
+      name == null;
+    }
     // Validate
     // Null values
+    // console.log(!name,!cover,!ongoing,!chapter,!readAt,!lastVisit,!otherNames,!rating);
     if (
       !name ||
       !cover ||
@@ -37,6 +40,7 @@ router.post("/create", async function (req, res, next) {
       !chapter ||
       !readAt ||
       !lastVisit ||
+      !otherNames ||
       !rating
     ) {
       return res.status(400).json({
@@ -44,7 +48,6 @@ router.post("/create", async function (req, res, next) {
       });
     }
     var dateFormat = new Date();
-    console.log(dateFormat);
     const newStory = new Story({
       name,
       cover,
@@ -52,7 +55,7 @@ router.post("/create", async function (req, res, next) {
       chapter,
       readAt,
       lastVisit,
-      otherNames,
+      otherNames: otherNames.split(","),
       lastEdited: dateFormat,
       rating,
     });
